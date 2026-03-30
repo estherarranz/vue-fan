@@ -2,6 +2,16 @@
 
 @import "tw-animate-css";
 
+body {
+
+  font-family: "Lexend" sans-serif;
+}
+
+@font-face{
+  font-family: batman;
+  src: url(../fonts/batmfo__ttf);
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

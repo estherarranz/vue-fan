@@ -6,23 +6,52 @@ import { Button } from '@/components/ui/button'
 
 <template>
 
-<div class="cappa">
-  <h1>Home Page</h1>
+<div class="fondo-home">
+
+  <h1>
+    <span>Diseño</span> Web y 
+    <br>
+    Apps <span>Interactivas</span>
+  </h1>
   
-  <Button variant="destructive">
-    Cilck me
-  </Button>
+  <div class="botones">
+    <Button variant="default">
+    <RouterLink to="/batman">Batman</RouterLink></Button>
+
+    <Button variant="default">
+    <RouterLink to="/indecision">Si o No</RouterLink></Button>
+
+    <Button variant="default">
+    <RouterLink to="/simpsons">simpsons</RouterLink></Button>
+
+    <Button variant="default">
+    <RouterLink to="/https://www.upv.es">upv</RouterLink></Button>
+
+  </div>
+
 </div>
   
 </template>
 
 <style scoped>
-.cappa {
-  margin: 20px;
+
+
+  .fondo-home {
+  background-color: rgb(21, 25, 52);
+  height: 100vh;
+  color: rgb(24, 182, 246);
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 12px;
-}
+
+.botones > Button {
+  margin-right: 0.5rem;
+  background-color: rgb(24, 182, 246);
+} 
+
+
+.botones > Button:hover {
+  background-color: rgba(24, 182, 246, 0.7);
+} 
+
+
 </style>
