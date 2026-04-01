@@ -9,6 +9,17 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+
+import Autoplay from 'embla-carousel-autoplay'
+
 const scrollToSection = (sectionId: string) => {
    
   if (sectionId === '#') {
@@ -23,24 +34,27 @@ const scrollToSection = (sectionId: string) => {
     }
 }
 
+
+ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
+
 </script>
 
 
 <template>
     <div class="batman"> 
 
-      <nav class="extra-nav">
+      <nav class="extra-nav flex flex-col sm:flex-row justify-between px-3">
    <RouterLink to="/">
     <House class="icon-home"/>
   </RouterLink>
 
   <NavigationMenu>
-    <NavigationMenuList>
+    <NavigationMenuList class="flex flex-col sm:flex-row">
 
        <NavigationMenuItem>
         <a href="#" @click.prevent="scrollToSection('#')">
       
-          <NavigationMenuLink :class="navigationMenuTriggerStyle">
+          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
             Portada
           </NavigationMenuLink>
         </a>
@@ -49,15 +63,15 @@ const scrollToSection = (sectionId: string) => {
 
       <NavigationMenuItem>
         <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
-          <NavigationMenuLink :class="navigationMenuTriggerStyle">
-            Vehiculos
+          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
+            Vehículos
           </NavigationMenuLink>
         </a>
       </NavigationMenuItem>
 
        <NavigationMenuItem>
         <a href="#videre" @click.prevent="scrollToSection('#videre')">
-          <NavigationMenuLink :class="navigationMenuTriggerStyle">
+          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
             Imagenes
           </NavigationMenuLink>
         </a>
@@ -65,7 +79,7 @@ const scrollToSection = (sectionId: string) => {
 
        <NavigationMenuItem>
         <a href="#contactus" @click.prevent="scrollToSection('#contactus')">
-          <NavigationMenuLink :class="navigationMenuTriggerStyle">
+          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
             Contacto
           </NavigationMenuLink>
         </a>
@@ -118,13 +132,48 @@ const scrollToSection = (sectionId: string) => {
     </div>
  </section>
 
+
+ <section id="videre" class="w-full flex justify-center items-center min-h-[60vh] lg:min-h[95vh] bg-gray-900">
+
+ <Carousel class="w-full max-w-md md:max-w-2xl lg:max-w-4xl bg-gray-900 text-white"
+ :opts="{
+  dragFree:true,
+  loop:true,
+ }"
+ :plugins="[Autoplay({
+      delay: 2000,
+    })]"
+ 
+ >
+    <CarouselContent>
+      <CarouselItem v-for="i in photos.length" :key="i">
+        <div class="p-1">
+          <Card class="bg-gray-900 border-none">
+            <CardContent class="flex aspect-6/4 items-center justify-center p-6">
+              <img 
+              
+              :src="`/imagines/batman/${photos[i-1]}.jpg`" 
+              
+              :alt="`Imagen ${i-1} de Batman`"
+              
+              class="w-full h-full object-cover"
+              >
+            </CardContent>
+          </Card>
+        </div>
+      </CarouselItem>
+    </CarouselContent>
+    <CarouselPrevious class="hidden md:flex justify-center items-center" />
+    <CarouselNext class="hidden md:flex justify-center items-center"/>
+  </Carousel>
+
+ </section>
+
  </div>
   
 </template>
 
 <style scoped>
-
-
 
   .batman {
   font-family: Arial, Helvetica, sans-serif;
@@ -160,8 +209,6 @@ const scrollToSection = (sectionId: string) => {
     left: 0;
   }
 }
-
-
 
 .titulus-img {
   background-size: 100% 100%;
