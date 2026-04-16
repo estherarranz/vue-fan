@@ -13,9 +13,57 @@ import Carrusimaginum from '@/components/ui/Carrusimaginum.vue';
 
 import { scrollToSection} from '@/utils/scrollToSection';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+
+import { Button } from '@/components/ui/button'
+import Label from '@/components/ui/label/Label.vue';
+
+import { Calendar } from '@/components/ui/calendar'
+import { ref } from 'vue';
+import { resolve } from 'path';
+
+const nomen = ref<string>("")
+const cognomen = ref<string>("")
+const missio = ref<string>("")
+
+const dies = ref<DateValue>()
+
+const estLoading = ref<boolean>
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
+
+
+
+
+
+const mittereSubmit = async () => {
+  await new Promise(resolve=> setTimeout(resolve, 2000))
+
+  
+
+  estLoading.value = false
+
+  nomen.value = ""
+  cognomen.value = ""
+  missio.value = ""
+  dies.value = undefined
+
+  
+
+
 
 </script>
 
@@ -124,10 +172,155 @@ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano",
 
  </section>
 
+<section id="contactus" class="w-full py-12 bg-gray-100">
+
+  <div class="container mx-auto max-w-5xl px-4">
+
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Contacta con Batman</h2>
+          
+    <div class="flex flex-col lg:flex-row gap-8 items-center">
+
+            <!-- Mapa de Google Maps -->
+      <div class="hidden lg:block w-full lg:w-1/2 rounded-lg overflow-hidden shadow-lg">
+        <div class="aspect-square">
+          <iframe></iframe>
+            
+          
+        </div>
+      </div>
+
+            <!-- Formulario -->
+      <div class="w-full max-w-md mx-auto lg:max-w-none lg:w-1/2 ">
+        <form  class="space-y-6 bg-white p-8 rounded-lg shadow-lg aspect-square"
+        
+        @submit.prevent="mittereSubmit"
+
+        >
+          
+        
+          <div class="space-y-2">
+
+            <Label for="nomen">Nombre</Label>
+            <Input id="nomen" required v-model="nomen"/>
+                  
+           
+
+          </div>
+                
+          <div class="space-y-2">
+
+            <Label for="cognomen">Nombre</Label>
+            <Input id="cognomen" required v-model="cognomen"/>
+
+          </div>
+
+          <div class="space-y-2">
+
+                  <Select required v - mission = "mission">
+              <SelectTrigger>
+            <SelectValue placeholder="Selecciona una misión" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Rescatare">
+              Rescate de rehenes
+            </SelectItem>
+            <SelectItem value="Investigare">
+              Investigación criminal
+            </SelectItem>
+            <SelectItem value="Persequi">
+              Persecución de villanos
+            </SelectItem>
+            <SelectItem value="Defendere">
+              Defensa de Gotham
+            </SelectItem>
+            
+          </SelectContent>
+        </Select>
+
+          </div>
+
+          <div class="space-y-2">
+
+            <Label>Fecha de la misión</Label>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline">
+                  <span v-if="dies">{{ dies.day }}/{{ dies.month }}/{{ dies.year }}</span>
+                  
+                  <span v-else> Selecciona una fecha</span>
+
+              </Button>
+            </PopoverTrigger>
+              <Calendar v-model="dies"/>
+            </Popover>
+          </div>
+
+          <Button type="submit"
+          class="w-full bg-[rgb(106,90,205)] hover:bg[rgb(88,75,171)] text-white- text-md mt-4"
+          :disabled="estLoading"
+          >
+          <Loader2 v-if="estLoading" class="mr-2 h-4 w-4 animate-spin"/>
+          <span v-if="estLoading"><Enviando...</span>
+          </Button>
+              
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="w-full bg-gray-900 text-gray-300 py-12">
+   <div class="flex flex-col md:flex-row md:justify-around gap-8 max-w-3xl mx-auto">
+
+    <div class="space-y-4 text-center md:text-left">
+
+      <h3 class="text-xl font-bold text-white">Información de Contacto</h3>
+            
+        <div class="space-y-2">
+          <p class="flex items-center gap-2 justify-center md:justify-start">
+
+            +1 (555) 123-4567
+
+          </p>
+          <p class="flex items-center gap-2 justify-center md:justify-start">
+
+            batman@wayneenterprises.com
+
+          </p>
+          <p class="flex items-center gap-2 justify-center md:justify-start">
+
+            Wayne Manor, Gotham City
+
+          </p>
+        </div>
+      </div>
+
+      <!-- Redes sociales -->
+      <div class="space-y-4 text-center md:text-left text-gray-400">
+        <h3 class="text-xl font-bold text-white">Síguenos</h3>
+        <div class="flex gap-8 justify-center">
+        
+          Icono de X -
+          Icono de Instagram -
+          Icono de Linkedin - 
+          Icono de MessageCircle
+              
+        </div>
+    </div>
+  </div>
+</footer>
+
+
+
  </div>
   
 </template>
 
+<section id="contactus" class="w-full py-12 bg-gray-100">
+
+  
+         
 <style scoped>
 
   .batman {
@@ -321,3 +514,4 @@ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano",
 
 
 </style>
+
