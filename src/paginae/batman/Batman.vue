@@ -1,17 +1,9 @@
 
 <script lang="ts" setup>
-import { House, Menu } from 'lucide-vue-next';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-
-import Carrusimaginum from '@/components/ui/Carrusimaginum.vue';
 
 import { scrollToSection} from '@/utils/scrollToSection';
+
+import Carrusimaginum from '@/components/ui/Carrusimaginum.vue';
 
 import { Toggle } from '@/components/ui/toggle'
 
@@ -38,6 +30,9 @@ import { onMounted, ref } from 'vue';
 import { resolve } from 'path';
 import type { NumberFieldIncrementProps } from 'reka-ui';
 
+import { useMouseMotio } from '@/composables/useMouseMotio';
+import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
+
 const nomen = ref<string>("")
 const cognomen = ref<string>("")
 const missio = ref<string>("")
@@ -48,47 +43,33 @@ const estLoading = ref<boolean>
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
 
-interface Coordinatas {
-  x: number
-  y: number
-}
+const { mousePositione, cumMouseMove, cumMouseLeave, } = useMouseMotio()
 
-const mousePositione = ref<>({ x:0, y:0 })
+const MenuItems = [
+  {
+    label: 'Portada',
+    href: '#',
+    onClick: () => scrollToSection('#')
+  },
 
-const videreMenu = ref<boolean>(true)
+  {
+    label: 'Vehículos',
+    href: '#vehiculis',
+    onClick: () => scrollToSection('#vehiculis')
+  },
 
-const handleResize = ()  => {
-  if (window.innerWidth <=640) {
-    videreMenu.value = false
-  } else {
-    videreMenu.value = true
+  {
+    label: 'Imágenes',
+    href: '#videre',
+    onClick: () => scrollToSection('#videre')
+  },
 
+  {
+    label: 'Contacto',
+    href: '#contactus',
+    onClick: () => scrollToSection('#contactus')
   }
-}
-
-onMounted(() => {
-  handleResize()
-  window.addEventListener('resize', handleResize)
-})
-
-onMounted(() => {
-window.removeEventListener('resize', handleResize)
-})
-
-const cumMouseMove = (e: MouseEvent)  => {
-  const rect = (e.target as HTMLElement).getBoundingClientRect()
-  
-  const centerX = rect.width / 2
-  const centerY = rect.height / 2
-
-  const mouseX = e.clientX - rect.left
-  const mouseY = e.clientY - rect.top
-
-  mousePositione.value = {
-    x: centerX - mouseX,
-    y: centerY - mouseY,
-  }
-}
+]
 
 
 const mittereSubmit = async () => {
@@ -111,68 +92,23 @@ const mittereSubmit = async () => {
 
 
 <template>
-    <div class="batman"> 
+    < class="batman"> 
 
-      <Toggle 
-      class="fixed top-2 right-4 bg-slate-500" 
-      @click= "videreMenu = !videreMenu">
+     <NavigatorPrimarius :items="MenuItems" home-route="/"/>
 
-      <Menu></Menu>
-      
-      </Toggle>
-
-      <nav v-if="videre" class="extra-nav flex flex-col sm:flex-row justify-between px-3">
-   <RouterLink to="/">
-    <House class="icon-home"/>
-  </RouterLink>
-
-  <NavigationMenu>
-    <NavigationMenuList class="flex flex-col sm:flex-row">
-
-       <NavigationMenuItem>
-        <a href="#" @click.prevent="scrollToSection('#')">
-      
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
-            Portada
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
-
-
-      <NavigationMenuItem>
-        <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
-            Vehículos
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
-
-       <NavigationMenuItem>
-        <a href="#videre" @click.prevent="scrollToSection('#videre')">
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
-            Imagenes
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
-
-       <NavigationMenuItem>
-        <a href="#contactus" @click.prevent="scrollToSection('#contactus')">
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(),'text-md hover:bg-[#6A5ACD] hover:text-white transition-all']">
-            Contacto
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
-
-    </NavigationMenuList>
-  </NavigationMenu>
-  </nav>
 
   <header class="titulus">
     <h1>Batman</h1>
     <div id="titulus-batman" 
     class="titulus-img"
     @mousemove="cumMouseMove"
-    @mouseleave="cumMouseLeave"></div>
+    @mouseleave="cumMouseLeave"
+    :style="{
+      backgroundPositionX: `calc(50% + ${mousePositione.x})px`, 
+      backgroundPositionY: `calc(50% + ${mousePositione.y})px`, 
+      transition: 'background-position 0.1s ease-out',
+    }"
+    ></div>
     <p>Él puede tomar la decisión que nadie más puede, la decisión correcta</p>
 
 
@@ -364,13 +300,11 @@ const mittereSubmit = async () => {
   </div>
 </footer>
 
-
-
  </div>
   
 </template>
 
-<section id="contactus" class="w-full py-12 bg-gray-100">
+
 
   
          
@@ -380,36 +314,6 @@ const mittereSubmit = async () => {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.icon-home {
-  height: 3rem;
-  width: 3rem;
-  color: slateblue;
-}
-
-.icon-home:hover {
-  color: white;
-  background-color: slateblue;
-}
-
-.extra-nav {
-  background-color: white;
-  opacity: 0.7;
-  box-shadow: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  top: 0;
-  width: 11rem;
-  border-radius: 0 0 1rem 0;
-  z-index: 1;
-}
-
-@media (min-width: 640px){
-  .extra-nav {
-    width: 100%;
-    border-radius: 0;
-    opacity: 1;
-    left: 0;
-  }
-}
 
 .titulus-img {
   background-size: 100% 100%;
