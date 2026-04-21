@@ -1,6 +1,6 @@
 
 <script lang="ts" setup>
-import { House } from 'lucide-vue-next';
+import { House, Menu } from 'lucide-vue-next';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -12,6 +12,8 @@ import {
 import Carrusimaginum from '@/components/ui/Carrusimaginum.vue';
 
 import { scrollToSection} from '@/utils/scrollToSection';
+
+import { Toggle } from '@/components/ui/toggle'
 
 import {
   Select,
@@ -32,8 +34,9 @@ import { Button } from '@/components/ui/button'
 import Label from '@/components/ui/label/Label.vue';
 
 import { Calendar } from '@/components/ui/calendar'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { resolve } from 'path';
+import type { NumberFieldIncrementProps } from 'reka-ui';
 
 const nomen = ref<string>("")
 const cognomen = ref<string>("")
@@ -45,8 +48,47 @@ const estLoading = ref<boolean>
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
 
+interface Coordinatas {
+  x: number
+  y: number
+}
 
+const mousePositione = ref<>({ x:0, y:0 })
 
+const videreMenu = ref<boolean>(true)
+
+const handleResize = ()  => {
+  if (window.innerWidth <=640) {
+    videreMenu.value = false
+  } else {
+    videreMenu.value = true
+
+  }
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onMounted(() => {
+window.removeEventListener('resize', handleResize)
+})
+
+const cumMouseMove = (e: MouseEvent)  => {
+  const rect = (e.target as HTMLElement).getBoundingClientRect()
+  
+  const centerX = rect.width / 2
+  const centerY = rect.height / 2
+
+  const mouseX = e.clientX - rect.left
+  const mouseY = e.clientY - rect.top
+
+  mousePositione.value = {
+    x: centerX - mouseX,
+    y: centerY - mouseY,
+  }
+}
 
 
 const mittereSubmit = async () => {
@@ -71,7 +113,15 @@ const mittereSubmit = async () => {
 <template>
     <div class="batman"> 
 
-      <nav class="extra-nav flex flex-col sm:flex-row justify-between px-3">
+      <Toggle 
+      class="fixed top-2 right-4 bg-slate-500" 
+      @click= "videreMenu = !videreMenu">
+
+      <Menu></Menu>
+      
+      </Toggle>
+
+      <nav v-if="videre" class="extra-nav flex flex-col sm:flex-row justify-between px-3">
    <RouterLink to="/">
     <House class="icon-home"/>
   </RouterLink>
@@ -119,7 +169,10 @@ const mittereSubmit = async () => {
 
   <header class="titulus">
     <h1>Batman</h1>
-    <div id="titulus-batman" class="titulus-img"></div>
+    <div id="titulus-batman" 
+    class="titulus-img"
+    @mousemove="cumMouseMove"
+    @mouseleave="cumMouseLeave"></div>
     <p>Él puede tomar la decisión que nadie más puede, la decisión correcta</p>
 
 
@@ -166,7 +219,7 @@ const mittereSubmit = async () => {
   <Carrusimaginum
   :photos="photos"
   base-path="/imagines/batman"
-  :autoplay-delay="100"
+  :autoplay-delay="3000"
 
   />
 
@@ -256,13 +309,13 @@ const mittereSubmit = async () => {
             </Popover>
           </div>
 
-          <Button type="submit"
-          class="w-full bg-[rgb(106,90,205)] hover:bg[rgb(88,75,171)] text-white- text-md mt-4"
-          :disabled="estLoading"
-          >
+         <Button type="submit"
+          class="w-full bg-[rgb(106,90,205)] hover:bg-[rgb(88,75,171)] text-white text-md mt-4"
+          :disabled="estLoading">
           <Loader2 v-if="estLoading" class="mr-2 h-4 w-4 animate-spin"/>
-          <span v-if="estLoading"><Enviando...</span>
+          <span v-if="estLoading">Enviando...</span> 
           </Button>
+
               
         </form>
       </div>
