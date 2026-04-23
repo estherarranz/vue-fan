@@ -3,11 +3,12 @@ import { RouterView } from 'vue-router';
 import 'vue-sonner/style.css'
 import { Toaster } from '@/components/ui/sonner'
 
+
 </script>
 
 <template>
   <main>
     <RouterView />
-    <SonnerToaster/>
+    <Toaster/>
   </main>
 </template>

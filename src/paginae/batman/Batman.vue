@@ -4,8 +4,11 @@
 import { scrollToSection} from '@/utils/scrollToSection';
 
 import Carrusimaginum from '@/components/ui/Carrusimaginum.vue';
-
-import { Toggle } from '@/components/ui/toggle'
+import { useMouseMotio } from '@/composables/useMouseMotio';
+import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
+import Label from '@/components/ui/label/Label.vue';
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 import {
   Select,
@@ -15,31 +18,24 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { Button } from '@/components/ui/button'
-import Label from '@/components/ui/label/Label.vue';
-
 import { Calendar } from '@/components/ui/calendar'
-import { onMounted, ref } from 'vue';
+
+import type {DateValue} from 'reka-ui';
+import { ref } from 'vue';
+
+import { Loader2 } from 'lucide-vue-next'
+
+
+import { Toggle } from '@/components/ui/toggle'
 import { resolve } from 'path';
-import type { NumberFieldIncrementProps } from 'reka-ui';
 
-import { useMouseMotio } from '@/composables/useMouseMotio';
-import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
 
-const nomen = ref<string>("")
-const cognomen = ref<string>("")
-const missio = ref<string>("")
-
-const dies = ref<DateValue>()
-
-const estLoading = ref<boolean>
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
 
@@ -71,20 +67,32 @@ const MenuItems = [
   }
 ]
 
+const dies = ref<DateValue>()
+
+const nomen = ref<string>('')
+const cognomen = ref<string>('')
+const missio = ref<string>('')
+
+
+const estLoading = ref<boolean>(false)
 
 const mittereSubmit = async () => {
-  await new Promise(resolve=> setTimeout(resolve, 2000))
 
-  
+estLoading.value = true
 
-  estLoading.value = false
+await new Promise(resolve=> setTimeout(resolve, 2000))
 
-  nomen.value = ""
-  cognomen.value = ""
-  missio.value = ""
-  dies.value = undefined
+estLoading.value=false
 
-  
+nomen.value = ''
+cognomen.value = ''
+missio.value = ''
+dies.value = undefined
+
+
+}
+
+
 
 
 
@@ -156,12 +164,10 @@ const mittereSubmit = async () => {
   :photos="photos"
   base-path="/imagines/batman"
   :autoplay-delay="3000"
-
-  />
-
+ />
  </section>
 
-<section id="contactus" class="w-full py-12 bg-gray-100">
+ <section id="contactus" class="w-full py-12 bg-gray-100">
 
   <div class="container mx-auto max-w-5xl px-4">
 
@@ -172,86 +178,100 @@ const mittereSubmit = async () => {
             <!-- Mapa de Google Maps -->
       <div class="hidden lg:block w-full lg:w-1/2 rounded-lg overflow-hidden shadow-lg">
         <div class="aspect-square">
-          <iframe></iframe>
-            
-          
+          <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1745.9774364572324!2d-0.34587451332735236!3d39.48366030170448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd60488259073375%3A0xfb410ba707ca33c9!2sUPV%20-%20Facultad%20de%20Bellas%20Artes%20BBAA!5e1!3m2!1ses!2ses!4v1776799155258!5m2!1ses!2ses" 
+          width="600" 
+          height="450" 
+          style="{ border: 0 }"
+          allowfullscreen 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
 
             <!-- Formulario -->
       <div class="w-full max-w-md mx-auto lg:max-w-none lg:w-1/2 ">
-        <form  class="space-y-6 bg-white p-8 rounded-lg shadow-lg aspect-square"
-        
-        @submit.prevent="mittereSubmit"
-
+        <form  
+          class="space-y-6 bg-white p-8 rounded-lg shadow-lg aspect-square"
+          @submit.prevent="mittereSubmit"
         >
-          
-        
           <div class="space-y-2">
-
-            <Label for="nomen">Nombre</Label>
-            <Input id="nomen" required v-model="nomen"/>
                   
-           
+           <Label for="nomen">Nombre</Label>
+           <Input id="nomen" v-model="nomen" required/>
 
           </div>
                 
           <div class="space-y-2">
+              
+           <Label for="cognomen">Apellidos</Label>
+           <Input id="cognomen" v-model="cognomen" required/>
 
-            <Label for="cognomen">Nombre</Label>
-            <Input id="cognomen" required v-model="cognomen"/>
+          </div>
+
+          <div class="space-y-2">
+          <Select required v-model="missio">
+
+            <SelectTrigger class="border-gray-200 bg-white text-gray-900">
+              <SelectValue placeholder="Selecciona una misión" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="rescatare">
+                Rescate de rehenes
+              </SelectItem>
+              <SelectItem value="investigare">
+                Investigación criminal
+              </SelectItem>
+              <SelectItem value="persequi">
+                Persecución de villanos
+              </SelectItem>
+              <SelectItem value="defendere">
+                Defensa de Gotham
+              </SelectItem>
+            </SelectContent>
+          </Select>
 
           </div>
 
           <div class="space-y-2">
 
-                  <Select required v - mission = "mission">
-              <SelectTrigger>
-            <SelectValue placeholder="Selecciona una misión" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Rescatare">
-              Rescate de rehenes
-            </SelectItem>
-            <SelectItem value="Investigare">
-              Investigación criminal
-            </SelectItem>
-            <SelectItem value="Persequi">
-              Persecución de villanos
-            </SelectItem>
-            <SelectItem value="Defendere">
-              Defensa de Gotham
-            </SelectItem>
-            
-          </SelectContent>
-        </Select>
-
-          </div>
-
-          <div class="space-y-2">
-
-            <Label>Fecha de la misión</Label>
-
+           <Label>Fecha de la misión</Label>
             <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline">
-                  <span v-if="dies">{{ dies.day }}/{{ dies.month }}/{{ dies.year }}</span>
-                  
-                  <span v-else> Selecciona una fecha</span>
 
-              </Button>
-            </PopoverTrigger>
-              <Calendar v-model="dies"/>
+              <PopoverTrigger as-child>
+                <Button variant="outline">
+                  <span v-if="dies">
+                    {{ dies.day }}/{{ dies.month }}/{{ dies.year }}
+                  </span>
+
+                  <span v-else class="text-gray-500">
+                    Selecciona una fecha
+
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-80">
+                <Calendar v-model="dies"/>
+              </PopoverContent>
             </Popover>
+
           </div>
 
-         <Button type="submit"
-          class="w-full bg-[rgb(106,90,205)] hover:bg-[rgb(88,75,171)] text-white text-md mt-4"
-          :disabled="estLoading">
-          <Loader2 v-if="estLoading" class="mr-2 h-4 w-4 animate-spin"/>
-          <span v-if="estLoading">Enviando...</span> 
-          </Button>
+          <Button
+           type="submit"
+           class="w-full bg-[rgb (106,90,205) hover: bg-[(88,75,171)] text-white text-md mt-4"
+           :disabled="estLoading"
 
+
+          > 
+            <Loader2 v-if= "estLoading" class="animate-spin h-4 w-4 mar-2"/>
+            <span v-if="estLoading">Enviando...</span>
+            <span v-else="estLoading">Enviar solicitud</span>
+          
+            Enviar solicitud
+
+          </Button>
               
         </form>
       </div>
@@ -300,13 +320,9 @@ const mittereSubmit = async () => {
   </div>
 </footer>
 
- </div>
   
 </template>
 
-
-
-  
          
 <style scoped>
 
