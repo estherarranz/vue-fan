@@ -25,8 +25,8 @@ import { Button } from '@/components/ui/button'
 		<Button variant="tertiarius" size="elongatis">
       		<RouterLink to="/">Exit</RouterLink>
     	</Button>
-    	<Button>
-      		<RouterLink to="">Enter</RouterLink>
+    	<Button variant="tertiarius" size="elongatis"> 
+      		<RouterLink to="/simpson/about">Enter</RouterLink>
     	</Button>
 	</div>
 </div>
@@ -36,10 +36,6 @@ import { Button } from '@/components/ui/button'
     <img class= "object-contain hidden md:block" src="/imagines/simpsons/bart.png" alt="" width="200px">
     <img class= "object-contain mt-20 hidden md:block" src="/imagines/simpsons/homer.png" alt="" width="195px">
     <img class= "object-contain mt-12" src="/imagines/simpsons/moe.png" alt="" width="220px">
-
-
-
-
 
 
 

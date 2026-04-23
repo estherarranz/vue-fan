@@ -62,7 +62,7 @@ export const router = createRouter({
 
             {
 
-             path: ':id'
+             path: ':id',
              name:'simpons-detail',
              component: Characters,
 
