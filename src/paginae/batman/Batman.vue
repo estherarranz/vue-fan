@@ -29,11 +29,14 @@ import { Calendar } from '@/components/ui/calendar'
 import type {DateValue} from 'reka-ui';
 import { ref } from 'vue';
 
-import { Loader2 } from 'lucide-vue-next'
+import { Instagram, Linkedin, Loader2, LucideBadgeCheck, Mail, MapPin, MessageCircle, Phone, X } from 'lucide-vue-next'
+
+import { toast } from 'vue-sonner'
 
 
 import { Toggle } from '@/components/ui/toggle'
 import { resolve } from 'path';
+import { MessageChannel } from 'worker_threads';
 
 
 
@@ -78,7 +81,27 @@ const estLoading = ref<boolean>(false)
 
 const mittereSubmit = async () => {
 
-estLoading.value = true
+estLoading.value = true 
+
+toast(`Solicitud enviada correctamente
+
+- Nombre: ${ nomen.value } ${ cognomen.value }
+- Misión: ${ missio.value }
+
+Fecha:  ${dies.value ? `${ dies.value.day}/${ dies.value.month}/ ${ dies.value.year }`: 'No especificada'}`, {
+
+duration:4000,
+position: "top-right",
+icon: LucideBadgeCheck,
+style: {
+  background: "#201c3b",
+  color: "#fff",
+  whiteSpace:"pre-wrap",
+}
+
+})
+
+
 
 await new Promise(resolve=> setTimeout(resolve, 2000))
 
@@ -182,7 +205,7 @@ dies.value = undefined
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1745.9774364572324!2d-0.34587451332735236!3d39.48366030170448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd60488259073375%3A0xfb410ba707ca33c9!2sUPV%20-%20Facultad%20de%20Bellas%20Artes%20BBAA!5e1!3m2!1ses!2ses!4v1776799155258!5m2!1ses!2ses" 
           width="600" 
           height="450" 
-          style="{ border: 0 }"
+          style="{ border: 0 }" 
           allowfullscreen 
           loading="lazy" 
           referrerpolicy="no-referrer-when-downgrade"
@@ -289,15 +312,20 @@ dies.value = undefined
         <div class="space-y-2">
           <p class="flex items-center gap-2 justify-center md:justify-start">
 
+            <Phone class="w-5 h-5"/>
+            
+
             +1 (555) 123-4567
 
           </p>
           <p class="flex items-center gap-2 justify-center md:justify-start">
+             <Mail class="w-5 h-5"/>
 
             batman@wayneenterprises.com
 
           </p>
           <p class="flex items-center gap-2 justify-center md:justify-start">
+             <MapPin class="w-5 h-5"/>
 
             Wayne Manor, Gotham City
 
@@ -309,11 +337,12 @@ dies.value = undefined
       <div class="space-y-4 text-center md:text-left text-gray-400">
         <h3 class="text-xl font-bold text-white">Síguenos</h3>
         <div class="flex gap-8 justify-center">
-        
-          Icono de X -
-          Icono de Instagram -
-          Icono de Linkedin - 
-          Icono de MessageCircle
+
+           <X class="w-10 h-10"/>
+           <Instagram class="w-10 h-10"/>
+           <Linkedin class="w-10 h-10"/>
+           <MessageCircle class="w-10 h-10"/>
+          
               
         </div>
     </div>
