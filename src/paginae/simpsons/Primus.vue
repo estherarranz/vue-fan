@@ -38,11 +38,6 @@ import { Button } from '@/components/ui/button'
     <img class= "object-contain mt-12" src="/imagines/simpsons/moe.png" alt="" width="220px">
 
 
-
-
-
-
-
 </div>
 
 
